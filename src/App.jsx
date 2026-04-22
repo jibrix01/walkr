@@ -223,6 +223,7 @@ function HomePage({ weather, location }) {
         </p>
         {weather ? (
           <div className="weather-bar">
+            <div className="weather-item"><span className="weather-label">Temperature</span><span className="weather-val">{weather.temp}°C</span></div>
             <div className="weather-item"><span className="weather-label">Feels like</span><span className="weather-val">{weather.feels}°C</span></div>
             <div className="weather-item"><span className="weather-label">Condition</span><span className="weather-val">{weather.description}</span></div>
             <div className="weather-item"><span className="weather-label">Wind</span><span className="weather-val">{weather.wind} km/h</span></div>
@@ -234,7 +235,7 @@ function HomePage({ weather, location }) {
         )}
       </div>
       <div className="card">
-        <div className="card-title">Why walk today?</div>
+        <div className="card-title">Why go out today?</div>
         <div className="benefit-grid">
           {BENEFITS.map((b) => (
             <div className="benefit-item" key={b.label}>
@@ -251,10 +252,9 @@ function HomePage({ weather, location }) {
           <p className="text-muted text-sm" style={{ marginBottom: 12 }}>
             📍 {location.city || "Detected location"} — {location.lat?.toFixed(4)}, {location.lon?.toFixed(4)}
           </p>
-          <div className="tag-row">
+          <div className="tag-row" style={{ justifyContent: "center" }}>
             <span className="tag">Lat {location.lat?.toFixed(3)}</span>
             <span className="tag">Lon {location.lon?.toFixed(3)}</span>
-            {weather && <span className="tag">{weather.temp}°C outside</span>}
           </div>
         </div>
       )}
