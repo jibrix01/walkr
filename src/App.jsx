@@ -609,7 +609,7 @@ function HistoryPage() {
                 </div>
                 {/* Actions + note */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, minWidth: 0 }}>
-                  <button className="btn-ghost" title="Delete run" onClick={() => deleteRun(r.id)}>✕</button>
+                  <button className="btn-ghost" title="Delete log" onClick={() => deleteRun(r.id)}>✕</button>
                   {r.note && (
                     <span style={{ fontSize: "0.72rem", color: G.muted, fontStyle: "italic", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                       title={r.note}>"{r.note}"</span>
