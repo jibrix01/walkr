@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
-// ── Storage helpers ──────────────────────────────────────────────────────────
 const PREFS_KEY = "walkr_prefs";
-const RUNS_KEY  = "walkr_runs";   // stored as a JSON array string
+const RUNS_KEY  = "walkr_runs"; 
 
 const loadJSON = (key, fallback) => {
   try {
@@ -20,7 +19,6 @@ const savePrefs = (p) => saveJSON(PREFS_KEY, p);
 const loadRuns  = () => loadJSON(RUNS_KEY, []);
 const saveRuns  = (runs) => saveJSON(RUNS_KEY, runs);
 
-// ── Palette & styles ─────────────────────────────────────────────────────────
 const G = {
   bg: "#0d1a12",
   card: "#132218",
@@ -193,7 +191,6 @@ const WALK_VIBES  = ["Urban", "Nature", "Waterfront", "Historic", "Night Stroll"
 const MUSIC_VIBES = ["Somber", "Cheerful", "Lo-fi Chill", "Epic Orchestral", "Jazz", "Podcast Mode", "Silence"];
 const OW_KEY = "demo";
 
-// ── Run utilities ─────────────────────────────────────────────────────────────
 function paceStr(distKm, timeMin) {
   if (!distKm || !timeMin || distKm <= 0 || timeMin <= 0) return null;
   const p = timeMin / distKm;
@@ -211,7 +208,6 @@ function fmtDate(iso)    { return new Date(iso).toLocaleDateString("en-PH", { mo
 function fmtWeekday(iso) { return new Date(iso).toLocaleDateString("en-PH", { weekday: "long" }); }
 function todayISO()      { return new Date().toISOString().slice(0, 10); }
 
-// ── Page: Home ────────────────────────────────────────────────────────────────
 function HomePage({ weather, location }) {
   return (
     <div className="page">
@@ -262,7 +258,6 @@ function HomePage({ weather, location }) {
   );
 }
 
-// ── Page: Map ─────────────────────────────────────────────────────────────────
 function MapPage({ location }) {
   const lat = location?.lat || 14.676;
   const lon = location?.lon || 121.0437;
@@ -294,7 +289,6 @@ function MapPage({ location }) {
   );
 }
 
-// ── Page: Suggestions ─────────────────────────────────────────────────────────
 function SuggestionsPage({ location, weather, prefs, setPrefs }) {
   const [suggestions, setSuggestions] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -345,7 +339,7 @@ Location: ${locDesc}
 Weather: ${weatherDesc}
 Walk / Run vibes I like: ${walkVibes}
 Music vibes I like: ${musicVibes}
-
+If there are no specified walk/run vibes, be creative and suggest something random!
 Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each object:
 {
   "name": "short destination or route name",
@@ -377,7 +371,7 @@ Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each ob
   return (
     <div className="page">
       <h2 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.8rem", marginBottom: 6 }}>Route Suggestions</h2>
-      <p className="text-muted text-sm" style={{ marginBottom: 24 }}>Personalized for your vibe, location, and today's weather.</p>
+      <p className="text-muted text-sm" style={{ marginBottom: 24 }}>Feel like anything today? Don't select any vibes, and explore somewhere random! 🎲</p>
 
       <div className="vibe-section">
         <div className="vibe-heading">Scenic vibe</div>
@@ -458,7 +452,6 @@ Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each ob
   );
 }
 
-// ── Page: History ─────────────────────────────────────────────────────────────
 function HistoryPage() {
   const [runs, setRuns] = useState(() => loadRuns());
   const [form, setForm] = useState({ date: todayISO(), distanceKm: "", timeMin: "", note: "" });
@@ -474,7 +467,6 @@ function HistoryPage() {
     const time = parseInt(form.timeMin, 10);
     if (!form.date || isNaN(dist) || dist <= 0 || isNaN(time) || time <= 0) return;
 
-    // Each run is a plain JSON object — shape matches what exportJSON writes
     const newRun = {
       id: Date.now(),
       date: form.date,
@@ -491,7 +483,6 @@ function HistoryPage() {
 
   const deleteRun = (id) => setRuns((prev) => prev.filter((r) => r.id !== id));
 
-  // Download raw JSON file — same structure as localStorage value
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(runs, null, 2)], { type: "application/json" });
     const url  = URL.createObjectURL(blob);
@@ -500,7 +491,6 @@ function HistoryPage() {
     URL.revokeObjectURL(url);
   };
 
-  // Aggregate stats
   const totalRuns = runs.length;
   const totalKm   = runs.reduce((s, r) => s + r.distanceKm, 0);
   const totalMin  = runs.reduce((s, r) => s + r.timeMin, 0);
@@ -624,7 +614,6 @@ function HistoryPage() {
   );
 }
 
-// ── Root App ──────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("home");
   const [location, setLocation] = useState(null);
