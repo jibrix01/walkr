@@ -676,7 +676,7 @@ export default function App() {
       <style>{css}</style>
       <div className="app">
         <nav>
-          <div className="logo">walk<span>r</span></div>
+          <div className="logo">wharf</div>
           <div className="nav-links">
             {NAV.map(([id, label]) => (
               <button key={id} className={`nav-btn ${page === id ? "active" : ""}`} onClick={() => setPage(id)}>{label}</button>
