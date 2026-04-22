@@ -216,9 +216,9 @@ function HomePage({ weather, location }) {
   return (
     <div className="page">
       <div style={{ marginBottom: 32 }}>
-        <h1 className="hero-title">Every walk is<br /><em>a small reset.</em></h1>
+        <h1 className="hero-title">Uncover your path;<br /><em>discover yourself.</em></h1>
         <p className="hero-sub">
-          Step outside. Your body and mind will thank you. Walkr helps you find the perfect route,
+          Step outside. Your body and mind will thank you. wharf helps you find the perfect route,
           soundtrack, and moment to just… go.
         </p>
         {weather ? (
@@ -280,11 +280,11 @@ function MapPage({ location }) {
       <div className="card" style={{ marginTop: 20 }}>
         <div className="card-title">About this spot</div>
         <p className="text-muted text-sm" style={{ lineHeight: 1.7 }}>
-          This map shows your approximate location. Use the <strong style={{ color: G.text }}>Suggestions</strong> page
-          to get AI-personalized walk routes nearby based on your vibes and current weather.
+          This map shows your approximate location. Use the <strong style={{ color: G.text }}>Suggest</strong> page
+          to get AI-personalized routes nearby based on your vibes and current weather.
         </p>
         {location?.city && (
-          <div className="tag-row mt-2">
+          <div className="tag-row mt-2" style={{ justifyContent: "center" }}>
             <span className="tag">📍 {location.city}</span>
             {location.country && <span className="tag">{location.country}</span>}
           </div>
@@ -339,20 +339,20 @@ function SuggestionsPage({ location, weather, prefs, setPrefs }) {
       ? `${location.city || "unknown city"} (lat ${location.lat?.toFixed(3)}, lon ${location.lon?.toFixed(3)})`
       : "unknown location";
 
-    const prompt = `You are a helpful walking companion assistant. Given the following context, suggest 3 great walk destinations or routes with music playlist vibes. Be concise, specific, and inspiring.
+    const prompt = `You are a helpful walking / running companion assistant. Given the following context, suggest 3 great destinations or routes with music playlist vibes. Be concise, specific, and inspiring.
 
 Location: ${locDesc}
 Weather: ${weatherDesc}
-Walk vibes I like: ${walkVibes}
+Walk / Run vibes I like: ${walkVibes}
 Music vibes I like: ${musicVibes}
 
 Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each object:
 {
   "name": "short destination or route name",
   "tag": "one-word category (Urban/Nature/Historic/etc)",
-  "description": "2-3 sentences: why to go, what to expect, best route tip",
-  "music": "specific playlist or genre suggestion matching their music vibe",
-  "distance": "estimated walk distance e.g. 1.5 km loop",
+  "description": "2-3 sentences: why to go, what to expect, best route tip, places to stop by along the route if it fits the vibes; be specific",
+  "music": "a specific album matching their music vibe, if you can't find one then suggest a specific song; follow the format Artist - Album or Song",
+  "distance": "estimated route distance e.g. 1.5 km loop",
   "bestTime": "e.g. Golden hour, Morning, Anytime"
 }`;
 
@@ -376,11 +376,11 @@ Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each ob
 
   return (
     <div className="page">
-      <h2 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.8rem", marginBottom: 6 }}>Walk Suggestions</h2>
+      <h2 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.8rem", marginBottom: 6 }}>Route Suggestions</h2>
       <p className="text-muted text-sm" style={{ marginBottom: 24 }}>Personalized for your vibe, location, and today's weather.</p>
 
       <div className="vibe-section">
-        <div className="vibe-heading">Walk vibe</div>
+        <div className="vibe-heading">Scenic vibe</div>
         <div className="vibe-chips">
           {WALK_VIBES.map((v) => (
             <button key={v} className={`chip ${prefs.walkVibes?.includes(v) ? "selected" : ""}`} onClick={() => toggleVibe("walk", v)}>{v}</button>
@@ -428,7 +428,7 @@ Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each ob
       )}
 
       <button className="btn-primary" onClick={getSuggestions} disabled={loading}>
-        {loading ? <><span className="loader" /> Generating…</> : "✦ Suggest walks"}
+        {loading ? <><span className="loader" /> Generating…</> : "✦ Suggest routes"}
       </button>
 
       {error && (
@@ -437,7 +437,7 @@ Respond ONLY with a JSON array of 3 objects, no markdown, no extra text. Each ob
 
       {suggestions && (
         <div style={{ marginTop: 28 }}>
-          <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.1rem", marginBottom: 16, color: G.muted }}>Here's where to walk today —</div>
+          <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.1rem", marginBottom: 16, color: G.muted }}>Here's where to go today —</div>
           {suggestions.map((s, i) => (
             <div className="suggestion-card" key={i}>
               <div className="suggestion-header">
@@ -508,21 +508,17 @@ function HistoryPage() {
 
   return (
     <div className="page">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
         <div>
-          <h2 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.8rem", marginBottom: 4 }}>Run History</h2>
-          <p className="text-muted text-sm">Stored as JSON in your browser · persists across sessions.</p>
+          <h2 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "1.8rem", marginBottom: 4 }}>History</h2>
         </div>
-        {runs.length > 0 && (
-          <button className="export-btn" onClick={exportJSON}>⬇ Export JSON</button>
-        )}
       </div>
 
       {/* Summary stats */}
       <div className="stats-grid">
         <div className="stat-box">
           <div className="stat-val">{totalRuns}</div>
-          <div className="stat-label">Total Runs</div>
+          <div className="stat-label">Total Outings</div>
         </div>
         <div className="stat-box">
           <div className="stat-val">{totalKm.toFixed(1)}</div>
@@ -533,15 +529,15 @@ function HistoryPage() {
           <div className="stat-label">Total Time</div>
         </div>
         <div className="stat-box">
-          <div className="stat-val" style={{ fontSize: "1.2rem" }}>{avgPace}</div>
+          <div className="stat-val" style={{ fontSize: "1.6rem" }}>{avgPace}</div>
           <div className="stat-label">Avg Pace</div>
         </div>
       </div>
 
       {/* Log form */}
       <div className="card">
-        <div className="card-title">Log a run</div>
-        {flash && <div className="flash-ok">✓ Run saved to JSON!</div>}
+        <div className="card-title">Log an outing</div>
+        {flash && <div className="flash-ok">✓ Outing saved!</div>}
 
         <div className="run-form">
           <div className="form-group">
@@ -569,7 +565,7 @@ function HistoryPage() {
 
         <button className="btn-primary" onClick={addRun}
           disabled={!form.date || !form.distanceKm || !form.timeMin}>
-          + Log run
+          + Log outing
         </button>
       </div>
 
@@ -676,7 +672,7 @@ export default function App() {
       <style>{css}</style>
       <div className="app">
         <nav>
-          <div className="logo">wharf</div>
+          <div className="logo">wh<span>arf</span></div>
           <div className="nav-links">
             {NAV.map(([id, label]) => (
               <button key={id} className={`nav-btn ${page === id ? "active" : ""}`} onClick={() => setPage(id)}>{label}</button>
